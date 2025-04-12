@@ -5,6 +5,21 @@ let menuItems = [
         icon: "home"
     },
     {
+        title: "Books",
+        href: "books.html",
+        icon: "book"
+    },
+    {
+        title: "Movies",
+        href: "movies.html",
+        icon: "movie_creation"
+    },
+    {
+        title: "Games",
+        href: "games.html",
+        icon: "videogame_asset"
+    },
+    {
         title: "Genres",
         href: "genres.html",
         icon: "library_music"
