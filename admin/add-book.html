@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Books</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script src="../js/custom.js"></script>
+
+    <!-- Favicon-->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="../plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="../plugins/animate-css/animate.css" rel="stylesheet" />
+    
+    <!-- Sweet Alert Css -->
+    <link href="../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <!-- JQuery DataTable Css -->
+    <link href="../plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="../css/themes/all-themes.css" rel="stylesheet" />
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand" href="index.html"></a>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img src="../images/user.png" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</div>
+                    <div class="btn-group user-helper-dropdown">
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list"  id="nav-container">
+                    
+                </ul>
+            </div>
+            </div>
+            <script id="nav-template" type="text/x-handlebars-template">
+                {{#each menuItems}}
+                    <li>
+                        <a href="{{href}}">
+                            <i class="material-icons">{{icon}}</i>
+                            <span>{{title}}</span>
+                        </a>
+                    </li>
+                {{/each}}
+            </script>
+            <script src="nav.js"></script>
+            <!-- #Menu -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>BOOKS</h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Add Book</h2>                            
+                        </div>
+                        <div class="body">
+                            <form id="form_validation" method="POST">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="isbn" required>
+                                        <label class="form-label">ISBN</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="title" required>
+                                        <label class="form-label">Title</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="description" required>
+                                        <label class="form-label">Description</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="number" class="form-control" name="cost" step="0.01" required>
+                                        <label class="form-label">Cost</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="number" class="form-control" name="no_of_copies" required>
+                                        <label class="form-label">No. of Copies</label>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-4">
+                                        <p class="card-inside-title">Author</p>
+                                        <div id="author-div">
+                                            <select class="form-control show-tick" id="author" name="author" required>
+                                                <option value="">-- Please select --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p class="card-inside-title">Genre</p>
+                                        <div id="genre-div">
+                                            <select class="form-control show-tick" id="genre" name="genre" required>
+                                                <option value="">-- Please select --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p class="card-inside-title">Publisher</p>
+                                        <div id="publisher-div">
+                                            <select class="form-control show-tick" id="publisher" name="publisher" required>
+                                                <option value="">-- Please select --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-4 ">
+                                        <a href="add-author.html"><p class="font-underline col-pink">Add Author?</p></a>
+                                    </div>
+                                    <div class="col-lg-4 ">
+                                        <a href="add-genre.html"><p class="font-underline col-pink">Add Genre?</p></a>
+                                    </div>
+                                    <div class="col-lg-4 ">
+                                        <a href="add-publisher.html"><p class="font-underline col-pink">Add Publisher?</p></a>
+                                    </div>
+                                </div>
+                                <button class="btn bg-red waves-effect" type="submit">SUBMIT</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="../plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="../plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Jquery Validation Plugin Css -->
+    <script src="../../plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- JQuery Steps Plugin Js -->
+    <script src="../../plugins/jquery-steps/jquery.steps.js"></script>
+
+    <!-- Sweet Alert Plugin Js -->
+    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
+    
+    <!-- Waves Effect Plugin Js -->
+    <script src="../plugins/node-waves/waves.js"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="../plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="../plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="../plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="../plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="../plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="../plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="../plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="../plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="../plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+
+    <!-- Custom Js -->
+    <script src="../js/admin.js"></script>
+    <script src="../js/pages/tables/jquery-datatable.js"></script>
+    <script src="../../js/pages/forms/form-validation.js"></script>
+
+    <!-- Demo Js -->
+    <script src="../js/demo.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            const $portalNameDisplay = $(".navbar-brand");
+            $portalNameDisplay.text(portalName);
+
+            $.ajax({
+                url: window.baseUrl + '/author/list',
+                type: 'GET',
+                success: function(data) {
+                    const authorDivElement = $('#author-div');
+                    const selectElement = $('#author');
+                    selectElement.empty();
+
+                    // Sort the data array alphabetically by firstName
+                    data.sort((a, b) => {
+                        const nameA = a.firstName.toUpperCase(); // Ignore case
+                        const nameB = b.firstName.toUpperCase(); // Ignore case
+                        if (nameA < nameB) {
+                            return -1; // a comes before b
+                        }
+                        if (nameA > nameB) {
+                            return 1; // a comes after b
+                        }
+                        return 0; // names are equal
+                    });
+
+                    let optionsHtml = '<option>-- Please select --</option>';
+                    data.forEach(author => {
+                        optionsHtml += `<option value="${author.id}">${author.firstName} ${author.lastName}</option>`;
+                    });
+                    selectElement.append(optionsHtml);
+
+                    authorDivElement.html(selectElement);
+                },
+                error: function(error) {
+                    alert("Error fetching staff author data");
+                }
+            });
+
+            $.ajax({
+                url: window.baseUrl + '/genre/list',
+                type: 'GET',
+                success: function(data) {
+                    const genreDivElement = $('#genre-div');
+                    const selectElement = $('#genre');
+                    selectElement.empty();
+
+                    // Sort the data array alphabetically by firstName
+                    data.sort((a, b) => {
+                        const nameA = a.name.toUpperCase(); // Ignore case
+                        const nameB = b.name.toUpperCase(); // Ignore case
+                        if (nameA < nameB) {
+                            return -1; // a comes before b
+                        }
+                        if (nameA > nameB) {
+                            return 1; // a comes after b
+                        }
+                        return 0; // names are equal
+                    });
+
+                    let optionsHtml = '<option>-- Please select --</option>';
+                    data.forEach(genre => {
+                        optionsHtml += `<option value="${genre.id}">${genre.name}</option>`;
+                    });
+                    selectElement.append(optionsHtml);
+
+                    genreDivElement.html(selectElement);
+                },
+                error: function(error) {
+                    alert("Error fetching staff author data");
+                }
+            });
+
+            $.ajax({
+                url: window.baseUrl + '/publisher/list',
+                type: 'GET',
+                success: function(data) {
+                    const publisherDivElement = $('#publisher-div');
+                    const selectElement = $('#publisher');
+                    selectElement.empty();
+
+                    // Sort the data array alphabetically by firstName
+                    data.sort((a, b) => {
+                        const nameA = a.name.toUpperCase(); // Ignore case
+                        const nameB = b.name.toUpperCase(); // Ignore case
+                        if (nameA < nameB) {
+                            return -1; // a comes before b
+                        }
+                        if (nameA > nameB) {
+                            return 1; // a comes after b
+                        }
+                        return 0; // names are equal
+                    });
+
+                    let optionsHtml = '<option>-- Please select --</option>';
+                    data.forEach(publisher => {
+                        optionsHtml += `<option value="${publisher.id}">${publisher.name}</option>`;
+                    });
+                    selectElement.append(optionsHtml);
+
+                    publisherDivElement.html(selectElement);
+                },
+                error: function(error) {
+                    alert("Error fetching staff author data");
+                }
+            });
+
+            
+            $('#form_validation').submit(function(event) {
+                event.preventDefault(); 
+
+                const isbn = $('input[name="isbn"]').val();
+                const title = $('input[name="title"]').val();
+                const description = $('input[name="description"]').val();
+                const cost = $('input[name="cost"]').val();
+                const no_of_copies = parseInt($('input[name="no_of_copies"]').val());
+                const author = parseInt($('select[name="author"]').val());
+                const genre = parseInt($('select[name="genre"]').val());
+                const publisher = parseInt($('select[name="publisher"]').val());
+
+                if (isNaN(author)) {
+                    alert('Please select an author.');
+                    return; 
+                }
+
+                if (isNaN(genre)) {
+                    alert('Please select a genre.');
+                    return; 
+                }
+                
+                if (isNaN(publisher)) {
+                    alert('Please select a publisher.');
+                    return; 
+                }
+
+                $.ajax({
+                    url: window.baseUrl + '/book/add', 
+                    type: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        isbn: isbn,
+                        title: title,
+                        description: description,
+                        cost: cost,
+                        noOfCopies: no_of_copies,
+                        author: {
+                            id: author
+                        },
+                        genre: {
+                            id: genre
+                        },
+                        publisher: {
+                            id: publisher
+                        }
+                    }),
+                    success: function(response) {
+                        console.log('Book added successfully:', response);
+                        alert('Book added successfully!');
+                        window.location.href = 'books.html';
+                    },
+                    error: function(error) {
+                        // Handle errors, e.g., show an error message
+                        console.error('Error adding Book:', error);
+                        alert('Error adding Book. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
