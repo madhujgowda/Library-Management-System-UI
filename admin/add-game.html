@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Books</title>
+    <title>Games</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
     <script src="../js/custom.js"></script>
 
@@ -120,22 +120,16 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>BOOKS</h2>
+                <h2>GAMES</h2>
             </div>
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Add Book</h2>                            
+                            <h2>Add Game</h2>                            
                         </div>
                         <div class="body">
                             <form id="form_validation" method="POST">
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="isbn" required>
-                                        <label class="form-label">ISBN</label>
-                                    </div>
-                                </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="title" required>
@@ -162,14 +156,6 @@
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-sm-4">
-                                        <p class="card-inside-title">Author</p>
-                                        <div id="author-div">
-                                            <select class="form-control show-tick" id="author" name="author" required>
-                                                <option value="">-- Please select --</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
                                         <p class="card-inside-title">Genre</p>
                                         <div id="genre-div">
                                             <select class="form-control show-tick" id="genre" name="genre" required>
@@ -185,16 +171,24 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-sm-4">
+                                        <p class="card-inside-title">Platform</p>
+                                        <div id="platform-div">
+                                            <select class="form-control show-tick" id="platform" name="platform" required>
+                                                <option value="">-- Please select --</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-4 ">
-                                        <a href="add-author.html"><p class="font-underline col-pink">Add Author?</p></a>
-                                    </div>
                                     <div class="col-lg-4 ">
                                         <a href="add-genre.html"><p class="font-underline col-pink">Add Genre?</p></a>
                                     </div>
                                     <div class="col-lg-4 ">
                                         <a href="add-publisher.html"><p class="font-underline col-pink">Add Publisher?</p></a>
+                                    </div>
+                                    <div class="col-lg-4 ">
+                                        <a href="add-platform.html"><p class="font-underline col-pink">Add Platform?</p></a>
                                     </div>
                                 </div>
                                 <button class="btn bg-red waves-effect" type="submit">SUBMIT</button>
@@ -253,40 +247,6 @@
         $(document).ready(function() {
             const $portalNameDisplay = $(".navbar-brand");
             $portalNameDisplay.text(portalName);
-
-            $.ajax({
-                url: window.baseUrl + '/author/list',
-                type: 'GET',
-                success: function(data) {
-                    const authorDivElement = $('#author-div');
-                    const selectElement = $('#author');
-                    selectElement.empty();
-
-                    // Sort the data array alphabetically by firstName
-                    data.sort((a, b) => {
-                        const nameA = a.firstName.toUpperCase(); // Ignore case
-                        const nameB = b.firstName.toUpperCase(); // Ignore case
-                        if (nameA < nameB) {
-                            return -1; // a comes before b
-                        }
-                        if (nameA > nameB) {
-                            return 1; // a comes after b
-                        }
-                        return 0; // names are equal
-                    });
-
-                    let optionsHtml = '<option>-- Please select --</option>';
-                    data.forEach(author => {
-                        optionsHtml += `<option value="${author.id}">${author.firstName} ${author.lastName}</option>`;
-                    });
-                    selectElement.append(optionsHtml);
-
-                    authorDivElement.html(selectElement);
-                },
-                error: function(error) {
-                    alert("Error fetching author data");
-                }
-            });
 
             $.ajax({
                 url: window.baseUrl + '/genre/list',
@@ -356,23 +316,51 @@
                 }
             });
 
+            $.ajax({
+                url: window.baseUrl + '/platform/list',
+                type: 'GET',
+                success: function(data) {
+                    const platformDivElement = $('#platform-div');
+                    const selectElement = $('#platform');
+                    selectElement.empty();
+
+                    // Sort the data array alphabetically by firstName
+                    data.sort((a, b) => {
+                        const nameA = a.name.toUpperCase(); // Ignore case
+                        const nameB = b.name.toUpperCase(); // Ignore case
+                        if (nameA < nameB) {
+                            return -1; // a comes before b
+                        }
+                        if (nameA > nameB) {
+                            return 1; // a comes after b
+                        }
+                        return 0; // names are equal
+                    });
+
+                    let optionsHtml = '<option>-- Please select --</option>';
+                    data.forEach(platform => {
+                        optionsHtml += `<option value="${platform.id}">${platform.name}</option>`;
+                    });
+                    selectElement.append(optionsHtml);
+
+                    platformDivElement.html(selectElement);
+                },
+                error: function(error) {
+                    alert("Error fetching platform data");
+                }
+            });
+
             
             $('#form_validation').submit(function(event) {
                 event.preventDefault(); 
 
-                const isbn = $('input[name="isbn"]').val();
                 const title = $('input[name="title"]').val();
                 const description = $('input[name="description"]').val();
                 const cost = $('input[name="cost"]').val();
                 const no_of_copies = parseInt($('input[name="no_of_copies"]').val());
-                const author = parseInt($('select[name="author"]').val());
                 const genre = parseInt($('select[name="genre"]').val());
                 const publisher = parseInt($('select[name="publisher"]').val());
-
-                if (isNaN(author)) {
-                    alert('Please select an author.');
-                    return; 
-                }
+                const platform = parseInt($('select[name="platform"]').val());
 
                 if (isNaN(genre)) {
                     alert('Please select a genre.');
@@ -384,37 +372,41 @@
                     return; 
                 }
 
+                if (isNaN(platform)) {
+                    alert('Please select a platform.');
+                    return; 
+                }
+
                 $.ajax({
-                    url: window.baseUrl + '/book/add', 
+                    url: window.baseUrl + '/game/add', 
                     type: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify({
-                        isbn: isbn,
                         title: title,
                         description: description,
                         cost: cost,
                         noOfCopies: no_of_copies,
-                        author: {
-                            id: author
-                        },
                         genre: {
                             id: genre
                         },
                         publisher: {
                             id: publisher
+                        },
+                        platform: {
+                            id: platform
                         }
                     }),
                     success: function(response) {
-                        console.log('Book added successfully:', response);
-                        alert('Book added successfully!');
-                        window.location.href = 'books.html';
+                        console.log('Game added successfully:', response);
+                        alert('Game added successfully!');
+                        window.location.href = 'games.html';
                     },
                     error: function(error) {
                         // Handle errors, e.g., show an error message
-                        console.error('Error adding Book:', error);
-                        alert('Error adding Book. Please try again.');
+                        console.error('Error adding Game:', error);
+                        alert('Error adding Game. Please try again.');
                     }
                 });
             });
