@@ -110,10 +110,10 @@
                         password: password
                     }),
                     success: function(response) {
-                        console.log('Login Successfull');
+                        console.log('Login Successful');
                         sessionStorage.setItem('adminId', response.userId);
                         sessionStorage.setItem('adminName', response.firstName + ' ' + response.lastName);
-                        alert('Login Successfull');
+                        alert('Login Successful');
                         window.location.href = 'index.html';
                     },
                     error: function(error) {
