@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Games</title>
+    <title>Books</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
     <script src="../js/custom.js"></script>
 
@@ -118,16 +118,22 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>GAMES</h2>
+                <h2>BOOKS</h2>
             </div>
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Add Game</h2>                            
+                            <h2>Update Book</h2>                            
                         </div>
                         <div class="body">
                             <form id="form_validation" method="POST">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="isbn" required>
+                                        <label class="form-label">ISBN</label>
+                                    </div>
+                                </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="title" required>
@@ -146,13 +152,15 @@
                                         <label class="form-label">Cost</label>
                                     </div>
                                 </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="number" class="form-control" name="no_of_copies" required>
-                                        <label class="form-label">No. of Copies</label>
-                                    </div>
-                                </div>
                                 <div class="row clearfix">
+                                    <div class="col-sm-4">
+                                        <p class="card-inside-title">Author</p>
+                                        <div id="author-div">
+                                            <select class="form-control show-tick" id="author" name="author" required>
+                                                <option value="">-- Please select --</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-sm-4">
                                         <p class="card-inside-title">Genre</p>
                                         <div id="genre-div">
@@ -169,16 +177,11 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <p class="card-inside-title">Platform</p>
-                                        <div id="platform-div">
-                                            <select class="form-control show-tick" id="platform" name="platform" required>
-                                                <option value="">-- Please select --</option>
-                                            </select>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row clearfix">
+                                    <div class="col-lg-4 ">
+                                        <a href="add-author.html"><p class="font-underline col-pink">Add Author?</p></a>
+                                    </div>
                                     <div class="col-lg-4 ">
                                         <a href="add-genre.html"><p class="font-underline col-pink">Add Genre?</p></a>
                                     </div>
@@ -186,7 +189,7 @@
                                         <a href="add-publisher.html"><p class="font-underline col-pink">Add Publisher?</p></a>
                                     </div>
                                 </div>
-                                <button class="btn bg-red waves-effect" type="submit">SUBMIT</button>
+                                <button class="btn bg-red waves-effect" type="submit">UDPATE</button>
                             </form>
                         </div>
                     </div>
@@ -258,105 +261,142 @@
                 window.location.href = 'login.html';
             }
 
-            $.ajax({
-                url: window.baseUrl + '/genre/list',
-                type: 'GET',
-                success: function(data) {
-                    const genreDivElement = $('#genre-div');
-                    const selectElement = $('#genre');
-                    selectElement.empty();
-
-                    // Sort the data array alphabetically by firstName
-                    data.sort((a, b) => {
-                        const nameA = a.name.toUpperCase(); // Ignore case
-                        const nameB = b.name.toUpperCase(); // Ignore case
-                        if (nameA < nameB) {
-                            return -1; // a comes before b
-                        }
-                        if (nameA > nameB) {
-                            return 1; // a comes after b
-                        }
-                        return 0; // names are equal
-                    });
-
-                    let optionsHtml = '<option>-- Please select --</option>';
-                    data.forEach(genre => {
-                        optionsHtml += `<option value="${genre.id}">${genre.name}</option>`;
-                    });
-                    selectElement.append(optionsHtml);
-
-                    genreDivElement.html(selectElement);
-                },
-                error: function(error) {
-                    alert("Error fetching genre data");
-                }
-            });
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('source');
+            const id = urlParams.get('id');
+            let authorValue = '';
+            let genreValue = '';
+            let publisherValue = '';
 
             $.ajax({
-                url: window.baseUrl + '/publisher/list',
+                url: window.baseUrl + '/book/view/' + id,
                 type: 'GET',
                 success: function(data) {
-                    const publisherDivElement = $('#publisher-div');
-                    const selectElement = $('#publisher');
-                    selectElement.empty();
+                    $('input[name="isbn"]').val(data.isbn).focus();
+                    $('input[name="title"]').val(data.title).focus();
+                    $('input[name="description"]').val(data.description).focus();
+                    $('input[name="cost"]').val(data.cost).focus();
+                    authorValue = data.author.id;
+                    genreValue = data.genre.id;
+                    publisherValue = data.publisher.id;
 
-                    // Sort the data array alphabetically by firstName
-                    data.sort((a, b) => {
-                        const nameA = a.name.toUpperCase(); // Ignore case
-                        const nameB = b.name.toUpperCase(); // Ignore case
-                        if (nameA < nameB) {
-                            return -1; // a comes before b
+                    $.ajax({
+                        url: window.baseUrl + '/author/list',
+                        type: 'GET',
+                        success: function(data) {
+                            const authorDivElement = $('#author-div');
+                            const selectElement = $('#author');
+                            selectElement.empty();
+
+                            // Sort the data array alphabetically by firstName
+                            data.sort((a, b) => {
+                                const nameA = a.firstName.toUpperCase(); // Ignore case
+                                const nameB = b.firstName.toUpperCase(); // Ignore case
+                                if (nameA < nameB) {
+                                    return -1; // a comes before b
+                                }
+                                if (nameA > nameB) {
+                                    return 1; // a comes after b
+                                }
+                                return 0; // names are equal
+                            });
+
+                            let optionsHtml = '';
+                            data.forEach(author => {
+                                if (authorValue == author.id) {
+                                    optionsHtml += `<option selected value="${author.id}">${author.firstName} ${author.lastName}</option>`;
+                                } else {
+                                    optionsHtml += `<option value="${author.id}">${author.firstName} ${author.lastName}</option>`;
+                                }
+                            });
+                            selectElement.append(optionsHtml);
+
+                            authorDivElement.html(selectElement);
+                        },
+                        error: function(error) {
+                            alert("Error fetching author data");
                         }
-                        if (nameA > nameB) {
-                            return 1; // a comes after b
-                        }
-                        return 0; // names are equal
                     });
 
-                    let optionsHtml = '<option>-- Please select --</option>';
-                    data.forEach(publisher => {
-                        optionsHtml += `<option value="${publisher.id}">${publisher.name}</option>`;
-                    });
-                    selectElement.append(optionsHtml);
+                    $.ajax({
+                        url: window.baseUrl + '/genre/list',
+                        type: 'GET',
+                        success: function(data) {
+                            const genreDivElement = $('#genre-div');
+                            const selectElement = $('#genre');
+                            selectElement.empty();
 
-                    publisherDivElement.html(selectElement);
+                            // Sort the data array alphabetically by firstName
+                            data.sort((a, b) => {
+                                const nameA = a.name.toUpperCase(); // Ignore case
+                                const nameB = b.name.toUpperCase(); // Ignore case
+                                if (nameA < nameB) {
+                                    return -1; // a comes before b
+                                }
+                                if (nameA > nameB) {
+                                    return 1; // a comes after b
+                                }
+                                return 0; // names are equal
+                            });
+
+                            let optionsHtml = '';
+                            data.forEach(genre => {
+                                if (genreValue == genre.id) {
+                                    optionsHtml += `<option selected value="${genre.id}">${genre.name}</option>`;
+                                } else {
+                                    optionsHtml += `<option value="${genre.id}">${genre.name}</option>`;
+                                }
+                            });
+                            selectElement.append(optionsHtml);
+
+                            genreDivElement.html(selectElement);
+                        },
+                        error: function(error) {
+                            alert("Error fetching genre data");
+                        }
+                    });
+
+                    $.ajax({
+                        url: window.baseUrl + '/publisher/list',
+                        type: 'GET',
+                        success: function(data) {
+                            const publisherDivElement = $('#publisher-div');
+                            const selectElement = $('#publisher');
+                            selectElement.empty();
+
+                            // Sort the data array alphabetically by firstName
+                            data.sort((a, b) => {
+                                const nameA = a.name.toUpperCase(); // Ignore case
+                                const nameB = b.name.toUpperCase(); // Ignore case
+                                if (nameA < nameB) {
+                                    return -1; // a comes before b
+                                }
+                                if (nameA > nameB) {
+                                    return 1; // a comes after b
+                                }
+                                return 0; // names are equal
+                            });
+
+                            let optionsHtml = '';
+                            data.forEach(publisher => {
+                                if (publisherValue == publisher.id) {
+                                    optionsHtml += `<option selected value="${publisher.id}">${publisher.name}</option>`;
+                                } else {
+                                    optionsHtml += `<option value="${publisher.id}">${publisher.name}</option>`;
+                                }
+                            });
+                            selectElement.append(optionsHtml);
+
+                            publisherDivElement.html(selectElement);
+                        },
+                        error: function(error) {
+                            alert("Error fetching publisher data");
+                        }
+                    });
+
                 },
                 error: function(error) {
-                    alert("Error fetching publisher data");
-                }
-            });
-
-            $.ajax({
-                url: window.baseUrl + '/platform/list',
-                type: 'GET',
-                success: function(data) {
-                    const platformDivElement = $('#platform-div');
-                    const selectElement = $('#platform');
-                    selectElement.empty();
-
-                    // Sort the data array alphabetically by firstName
-                    data.sort((a, b) => {
-                        const nameA = a.name.toUpperCase(); // Ignore case
-                        const nameB = b.name.toUpperCase(); // Ignore case
-                        if (nameA < nameB) {
-                            return -1; // a comes before b
-                        }
-                        if (nameA > nameB) {
-                            return 1; // a comes after b
-                        }
-                        return 0; // names are equal
-                    });
-
-                    let optionsHtml = '<option>-- Please select --</option>';
-                    data.forEach(platform => {
-                        optionsHtml += `<option value="${platform.id}">${platform.name}</option>`;
-                    });
-                    selectElement.append(optionsHtml);
-
-                    platformDivElement.html(selectElement);
-                },
-                error: function(error) {
-                    alert("Error fetching platform data");
+                    alert("Error fetching book data");
                 }
             });
 
@@ -364,13 +404,18 @@
             $('#form_validation').submit(function(event) {
                 event.preventDefault(); 
 
+                const isbn = $('input[name="isbn"]').val();
                 const title = $('input[name="title"]').val();
                 const description = $('input[name="description"]').val();
                 const cost = $('input[name="cost"]').val();
-                const no_of_copies = parseInt($('input[name="no_of_copies"]').val());
+                const author = parseInt($('select[name="author"]').val());
                 const genre = parseInt($('select[name="genre"]').val());
                 const publisher = parseInt($('select[name="publisher"]').val());
-                const platform = parseInt($('select[name="platform"]').val());
+
+                if (isNaN(author)) {
+                    alert('Please select an author.');
+                    return; 
+                }
 
                 if (isNaN(genre)) {
                     alert('Please select a genre.');
@@ -382,41 +427,37 @@
                     return; 
                 }
 
-                if (isNaN(platform)) {
-                    alert('Please select a platform.');
-                    return; 
-                }
-
                 $.ajax({
-                    url: window.baseUrl + '/game/add', 
+                    url: window.baseUrl + '/book/update', 
                     type: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify({
+                        id: parseInt(id),
+                        isbn: isbn,
                         title: title,
                         description: description,
                         cost: cost,
-                        noOfCopies: no_of_copies,
+                        author: {
+                            id: author
+                        },
                         genre: {
                             id: genre
                         },
                         publisher: {
                             id: publisher
-                        },
-                        platform: {
-                            id: platform
                         }
                     }),
                     success: function(response) {
-                        console.log('Game added successfully:', response);
-                        alert('Game added successfully!');
-                        window.location.href = 'games.html';
+                        console.log('Book updated successfully:', response);
+                        alert('Book updated successfully!');
+                        window.location.href = 'books.html';
                     },
                     error: function(error) {
                         // Handle errors, e.g., show an error message
-                        console.error('Error adding Game:', error);
-                        alert('Error adding Game. Please try again.');
+                        console.error('Error updating Book:', error);
+                        alert('Error updating Book. Please try again.');
                     }
                 });
             });

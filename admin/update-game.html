@@ -124,7 +124,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Add Game</h2>                            
+                            <h2>Update Game</h2>                            
                         </div>
                         <div class="body">
                             <form id="form_validation" method="POST">
@@ -144,12 +144,6 @@
                                     <div class="form-line">
                                         <input type="number" class="form-control" name="cost" step="0.01" required>
                                         <label class="form-label">Cost</label>
-                                    </div>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="number" class="form-control" name="no_of_copies" required>
-                                        <label class="form-label">No. of Copies</label>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
@@ -186,7 +180,7 @@
                                         <a href="add-publisher.html"><p class="font-underline col-pink">Add Publisher?</p></a>
                                     </div>
                                 </div>
-                                <button class="btn bg-red waves-effect" type="submit">SUBMIT</button>
+                                <button class="btn bg-red waves-effect" type="submit">UDPATE</button>
                             </form>
                         </div>
                     </div>
@@ -258,105 +252,141 @@
                 window.location.href = 'login.html';
             }
 
-            $.ajax({
-                url: window.baseUrl + '/genre/list',
-                type: 'GET',
-                success: function(data) {
-                    const genreDivElement = $('#genre-div');
-                    const selectElement = $('#genre');
-                    selectElement.empty();
-
-                    // Sort the data array alphabetically by firstName
-                    data.sort((a, b) => {
-                        const nameA = a.name.toUpperCase(); // Ignore case
-                        const nameB = b.name.toUpperCase(); // Ignore case
-                        if (nameA < nameB) {
-                            return -1; // a comes before b
-                        }
-                        if (nameA > nameB) {
-                            return 1; // a comes after b
-                        }
-                        return 0; // names are equal
-                    });
-
-                    let optionsHtml = '<option>-- Please select --</option>';
-                    data.forEach(genre => {
-                        optionsHtml += `<option value="${genre.id}">${genre.name}</option>`;
-                    });
-                    selectElement.append(optionsHtml);
-
-                    genreDivElement.html(selectElement);
-                },
-                error: function(error) {
-                    alert("Error fetching genre data");
-                }
-            });
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('source');
+            const id = urlParams.get('id');
+            let genreValue = '';
+            let publisherValue = '';
+            let platformValue = '';
 
             $.ajax({
-                url: window.baseUrl + '/publisher/list',
+                url: window.baseUrl + '/game/view/' + id,
                 type: 'GET',
                 success: function(data) {
-                    const publisherDivElement = $('#publisher-div');
-                    const selectElement = $('#publisher');
-                    selectElement.empty();
+                    $('input[name="title"]').val(data.title).focus();
+                    $('input[name="description"]').val(data.description).focus();
+                    $('input[name="cost"]').val(data.cost).focus();
+                    genreValue = data.genre.id;
+                    publisherValue = data.publisher.id;
+                    platformValue = data.platform.id;
 
-                    // Sort the data array alphabetically by firstName
-                    data.sort((a, b) => {
-                        const nameA = a.name.toUpperCase(); // Ignore case
-                        const nameB = b.name.toUpperCase(); // Ignore case
-                        if (nameA < nameB) {
-                            return -1; // a comes before b
+                    $.ajax({
+                        url: window.baseUrl + '/genre/list',
+                        type: 'GET',
+                        success: function(data) {
+                            const genreDivElement = $('#genre-div');
+                            const selectElement = $('#genre');
+                            selectElement.empty();
+
+                            // Sort the data array alphabetically by firstName
+                            data.sort((a, b) => {
+                                const nameA = a.name.toUpperCase(); // Ignore case
+                                const nameB = b.name.toUpperCase(); // Ignore case
+                                if (nameA < nameB) {
+                                    return -1; // a comes before b
+                                }
+                                if (nameA > nameB) {
+                                    return 1; // a comes after b
+                                }
+                                return 0; // names are equal
+                            });
+
+                            let optionsHtml = '';
+                            data.forEach(genre => {
+                                if (genreValue == genre.id) {
+                                    optionsHtml += `<option selected value="${genre.id}">${genre.name}</option>`;
+                                } else {
+                                    optionsHtml += `<option value="${genre.id}">${genre.name}</option>`;
+                                }
+                            });
+                            selectElement.append(optionsHtml);
+
+                            genreDivElement.html(selectElement);
+                        },
+                        error: function(error) {
+                            alert("Error fetching genre data");
                         }
-                        if (nameA > nameB) {
-                            return 1; // a comes after b
-                        }
-                        return 0; // names are equal
                     });
 
-                    let optionsHtml = '<option>-- Please select --</option>';
-                    data.forEach(publisher => {
-                        optionsHtml += `<option value="${publisher.id}">${publisher.name}</option>`;
-                    });
-                    selectElement.append(optionsHtml);
+                    $.ajax({
+                        url: window.baseUrl + '/publisher/list',
+                        type: 'GET',
+                        success: function(data) {
+                            const publisherDivElement = $('#publisher-div');
+                            const selectElement = $('#publisher');
+                            selectElement.empty();
 
-                    publisherDivElement.html(selectElement);
+                            // Sort the data array alphabetically by firstName
+                            data.sort((a, b) => {
+                                const nameA = a.name.toUpperCase(); // Ignore case
+                                const nameB = b.name.toUpperCase(); // Ignore case
+                                if (nameA < nameB) {
+                                    return -1; // a comes before b
+                                }
+                                if (nameA > nameB) {
+                                    return 1; // a comes after b
+                                }
+                                return 0; // names are equal
+                            });
+
+                            let optionsHtml = '';
+                            data.forEach(publisher => {
+                                if (publisherValue == publisher.id) {
+                                    optionsHtml += `<option selected value="${publisher.id}">${publisher.name}</option>`;
+                                } else {
+                                    optionsHtml += `<option value="${publisher.id}">${publisher.name}</option>`;
+                                }
+                            });
+                            selectElement.append(optionsHtml);
+
+                            publisherDivElement.html(selectElement);
+                        },
+                        error: function(error) {
+                            alert("Error fetching publisher data");
+                        }
+                    });
+
+                    $.ajax({
+                        url: window.baseUrl + '/platform/list',
+                        type: 'GET',
+                        success: function(data) {
+                            const platformDivElement = $('#platform-div');
+                            const selectElement = $('#platform');
+                            selectElement.empty();
+
+                            // Sort the data array alphabetically by firstName
+                            data.sort((a, b) => {
+                                const nameA = a.name.toUpperCase(); // Ignore case
+                                const nameB = b.name.toUpperCase(); // Ignore case
+                                if (nameA < nameB) {
+                                    return -1; // a comes before b
+                                }
+                                if (nameA > nameB) {
+                                    return 1; // a comes after b
+                                }
+                                return 0; // names are equal
+                            });
+
+                            let optionsHtml = '';
+                            data.forEach(platform => {
+                                if (platformValue == platform.id) {
+                                    optionsHtml += `<option selected value="${platform.id}">${platform.name}</option>`;
+                                } else {
+                                    optionsHtml += `<option value="${platform.id}">${platform.name}</option>`;
+                                }
+                            });
+                            selectElement.append(optionsHtml);
+
+                            platformDivElement.html(selectElement);
+                        },
+                        error: function(error) {
+                            alert("Error fetching platform data");
+                        }
+                    });
+
                 },
                 error: function(error) {
-                    alert("Error fetching publisher data");
-                }
-            });
-
-            $.ajax({
-                url: window.baseUrl + '/platform/list',
-                type: 'GET',
-                success: function(data) {
-                    const platformDivElement = $('#platform-div');
-                    const selectElement = $('#platform');
-                    selectElement.empty();
-
-                    // Sort the data array alphabetically by firstName
-                    data.sort((a, b) => {
-                        const nameA = a.name.toUpperCase(); // Ignore case
-                        const nameB = b.name.toUpperCase(); // Ignore case
-                        if (nameA < nameB) {
-                            return -1; // a comes before b
-                        }
-                        if (nameA > nameB) {
-                            return 1; // a comes after b
-                        }
-                        return 0; // names are equal
-                    });
-
-                    let optionsHtml = '<option>-- Please select --</option>';
-                    data.forEach(platform => {
-                        optionsHtml += `<option value="${platform.id}">${platform.name}</option>`;
-                    });
-                    selectElement.append(optionsHtml);
-
-                    platformDivElement.html(selectElement);
-                },
-                error: function(error) {
-                    alert("Error fetching platform data");
+                    alert("Error fetching game data");
                 }
             });
 
@@ -367,10 +397,10 @@
                 const title = $('input[name="title"]').val();
                 const description = $('input[name="description"]').val();
                 const cost = $('input[name="cost"]').val();
-                const no_of_copies = parseInt($('input[name="no_of_copies"]').val());
                 const genre = parseInt($('select[name="genre"]').val());
                 const publisher = parseInt($('select[name="publisher"]').val());
                 const platform = parseInt($('select[name="platform"]').val());
+
 
                 if (isNaN(genre)) {
                     alert('Please select a genre.');
@@ -388,16 +418,16 @@
                 }
 
                 $.ajax({
-                    url: window.baseUrl + '/game/add', 
+                    url: window.baseUrl + '/game/update', 
                     type: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify({
+                        id: parseInt(id),
                         title: title,
                         description: description,
                         cost: cost,
-                        noOfCopies: no_of_copies,
                         genre: {
                             id: genre
                         },
@@ -409,14 +439,14 @@
                         }
                     }),
                     success: function(response) {
-                        console.log('Game added successfully:', response);
-                        alert('Game added successfully!');
+                        console.log('Game updated successfully:', response);
+                        alert('Game updated successfully!');
                         window.location.href = 'games.html';
                     },
                     error: function(error) {
                         // Handle errors, e.g., show an error message
-                        console.error('Error adding Game:', error);
-                        alert('Error adding Game. Please try again.');
+                        console.error('Error updating Game:', error);
+                        alert('Error updating Game. Please try again.');
                     }
                 });
             });
