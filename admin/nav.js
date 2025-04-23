@@ -5,6 +5,11 @@ let menuItems = [
         icon: "home"
     },
     {
+        title: "Users",
+        href: "users.html",
+        icon: "wc"
+    },
+    {
         title: "Books",
         href: "books.html",
         icon: "book"
@@ -32,7 +37,7 @@ let menuItems = [
     {
         title: "Authors",
         href: "authors.html",
-        icon: "people_outline"
+        icon: "record_voice_over"
     }
 ];
 const src =
