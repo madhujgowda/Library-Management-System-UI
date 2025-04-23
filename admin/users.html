@@ -228,7 +228,7 @@
                         row.append('<td>' + user.phoneNumber + '</td>');
                         row.append('<td>' + user.userType.type + '</td>');
                         row.append("<td><div class=\"icon-button-demo\">" +
-                            "<button type=\"button\" id=\"delete-button\" class=\"btn btn-danger btn-circle waves-effect waves-circle waves-float\" data-user-id=\"" + user.id + "\"><i class=\"material-icons\">delete</i></button>" + 
+                            "<button type=\"button\" class=\"btn btn-success btn-circle waves-effect waves-circle waves-float\"><a href=\"update-user.html?id=" + user.id + "\" style=\"color: white\"><i class=\"material-icons\">edit</i></a></button>" +
                             "</div></td>");
                         tableBody.append(row);
                     });
