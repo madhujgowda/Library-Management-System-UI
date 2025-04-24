@@ -324,8 +324,8 @@
                         },
                         error: function(error) {
                             // Handle error
-                            console.error('Error creating reservation:', error);
-                            alert('Error creating reservation');
+                            console.error('Max reservation reached', error);
+                            alert('Max reservation reached');
                         }
                     });
                 }
