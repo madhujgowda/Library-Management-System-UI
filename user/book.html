@@ -299,6 +299,37 @@
                     alert("Error fetching books data");
                 }
             });
+
+            $('#resultDataTable').on('click', '#reserve-button', function() {
+                if (confirm("Are you sure you want to reserve this item?")) {
+                    const itemId = $(this).data('item-id');
+                    $.ajax({
+                        url: window.baseUrl + '/reservation/create',
+                        type: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify({
+                            item: {
+                                id: itemId
+                            },
+                            user: {
+                                id: userId
+                            }
+                        }),
+                        success: function(response) {
+                            // Handle successful deletion
+                            alert('Reservation created successfully!');
+                            window.location.href = 'reservations.html';
+                        },
+                        error: function(error) {
+                            // Handle error
+                            console.error('Error creating reservation:', error);
+                            alert('Error creating reservation');
+                        }
+                    });
+                }
+            });
         });
     </script>
 </body>
