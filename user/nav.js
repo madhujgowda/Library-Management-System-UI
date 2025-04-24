@@ -18,6 +18,11 @@ let menuItems = [
         title: "Games",
         href: "games.html",
         icon: "videogame_asset"
+    },
+    {
+        title: "Reservations",
+        href: "reservations.html",
+        icon: "https"
     }
 ];
 const src =
