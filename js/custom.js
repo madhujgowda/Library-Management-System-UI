@@ -2,6 +2,10 @@ const baseUrl = "http://localhost:8080";
 
 let portalName = "UNT Library Management System";
 
+let availableStatus = "Available";
+let checkedOutStatus = "Checked-Out";
+let onHoldStatus = "On-Hold";
+
 window.baseUrl = baseUrl;
 
 function formatDate(dateTimeString) {
