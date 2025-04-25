@@ -277,7 +277,7 @@
                             row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="check-out-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
                         } else if (item.itemStatus.status == checkedOutStatus)  {
                             row.append('<td><span class="label bg-orange">' + checkedOutStatus + '</span></td>');
-                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="reserve-button" class="btn bg-red waves-effect" data-item-id="' + item.id + '"><i class="material-icons">undo</i><span>RETURN</span></button></div></div></td>');
+                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="return-button" class="btn bg-red waves-effect" data-item-id="' + item.id + '"><i class="material-icons">undo</i><span>RETURN</span></button></div></div></td>');
                         } else {
                             row.append('<td><span class="label bg-light-blue">' + onHoldStatus + '</span></td>');
                             row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="check-out-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
@@ -295,6 +295,26 @@
             $('#resultDataTable').on('click', '#check-out-button', function() {
                 const itemId = $(this).data('item-id');
                 window.location.href = 'check-out.html?id=' + itemId;
+            });
+
+            $('#resultDataTable').on('click', '#return-button', function() {
+                if (confirm("Are you sure you want to return this item?")) {
+                    const itemId = $(this).data('item-id');
+                    $.ajax({
+                        url: window.baseUrl + '/checkout/return/item/' + itemId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            // Handle successful deletion
+                            alert('Item returned successfully!');
+                            window.location.href = 'movie.html?id=' + id;
+                        },
+                        error: function(error) {
+                            // Handle error
+                            console.error('Error returning a item:', error);
+                            alert('Error returning a item. Please try again.');
+                        }
+                    });
+                }
             });
         });
     </script>
