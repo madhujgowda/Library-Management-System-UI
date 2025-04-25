@@ -124,6 +124,13 @@
                                 <span id="book-title"></span>
                                 <small id="book-description"></small>
                             </h2>
+                            <br>
+                            <div class="icon-and-text-button-demo">
+                                <button id="save-item-button" type="button" class="btn bg-grey waves-effect">
+                                    <i class="material-icons">bookmark</i>
+                                    <span>SAVE ITEM</span>
+                                </button>
+                            </div>
                         </div>
                         <div class="body">
                             <div class="body table-responsive">
@@ -326,6 +333,33 @@
                             // Handle error
                             console.error('Max reservation reached', error);
                             alert('Max reservation reached');
+                        }
+                    });
+                }
+            });
+
+            $('#save-item-button').on('click', function() {
+                if (confirm("Are you sure you want to save this item?")) {
+                    $.ajax({
+                        url: window.baseUrl + '/saved-item/create',
+                        type: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify({
+                            mediaId: parseInt(id),
+                            itemType: "Movie",
+                            userId: userId
+                        }),
+                        success: function(response) {
+                            // Handle successful deletion
+                            alert('Item saved Successfully!');
+                            window.location.href = 'saved-items.html';
+                        },
+                        error: function(error) {
+                            // Handle error
+                            console.error('Not able to save. Please try again later', error);
+                            alert('Not able to save. Please try again later');
                         }
                     });
                 }
