@@ -250,6 +250,10 @@
                     $('#game-genre').text(data.genre.name);
                     $('#game-publisher').text(data.publisher.name);
                     $('#game-platform').text(data.platform.name);
+
+                    sessionStorage.setItem('itemId', id);
+                    sessionStorage.setItem('itemTitle', data.title);
+                    sessionStorage.setItem('itemDescription', data.description);
                 },
                 error: function(error) {
                     alert("Error fetching game data");
@@ -275,13 +279,13 @@
                         row.append('<td>' + item.id + '</td>');
                         if (item.itemStatus.status == availableStatus) {
                             row.append('<td><span class="label bg-green">' + availableStatus + '</span></td>');
-                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="reserve-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
+                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="check-out-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
                         } else if (item.itemStatus.status == checkedOutStatus)  {
                             row.append('<td><span class="label bg-orange">' + checkedOutStatus + '</span></td>');
                             row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="reserve-button" class="btn bg-red waves-effect" data-item-id="' + item.id + '"><i class="material-icons">undo</i><span>RETURN</span></button></div></div></td>');
                         } else {
                             row.append('<td><span class="label bg-light-blue">' + onHoldStatus + '</span></td>');
-                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="reserve-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
+                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="check-out-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
                         }                       
                         tableBody.append(row);
                     });
@@ -291,6 +295,11 @@
                 error: function(error) {
                     alert("Error fetching games data");
                 }
+            });
+
+            $('#resultDataTable').on('click', '#check-out-button', function() {
+                const itemId = $(this).data('item-id');
+                window.location.href = 'check-out.html?id=' + itemId;
             });
         });
     </script>

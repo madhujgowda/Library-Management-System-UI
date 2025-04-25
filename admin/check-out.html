@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Movies</title>
+    <title>Checkout</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
 
     <script src="../js/custom.js"></script>
@@ -114,69 +114,55 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>MOVIES</h2>
+                <h2>CHECK OUT</h2>
             </div>
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header bg-teal">
                             <h2>
-                                <span id="movie-title"></span>
-                                <small id="movie-description"></small>
+                                <span id="item-title"></span>
+                                <small id="item-description"></small>
                             </h2>
                         </div>
                         <div class="body">
-                            <div class="body table-responsive">
-                                <table class="table table-striped">
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Cost</th>
-                                            <td id="movie-cost"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Genre</th>
-                                            <td id="movie-genre"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Publisher</th>
-                                            <td id="movie-publisher"></td>
-                                        </tr>                                    
-                                    </tbody>
-                                </table>
+                            <!-- Exportable Table -->
+                            <div class="row clearfix">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="card">
+                                        <div class="header">
+                                            <h2>
+                                                Select a User to Checkout
+                                            </h2>
+                                        </div>
+                                        <div class="body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped table-hover dataTable" id="resultDataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th>First Name</th>
+                                                            <th>Last Name</th>
+                                                            <th>Email</th>
+                                                            <th>Phone Number</th>
+                                                            <th>User Type</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- #END# Exportable Table -->
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Exportable Table -->
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
-                                View All Copies
-                            </h2>
-                        </div>
-                        <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable" id="resultDataTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- #END# Exportable Table -->
         </div>
     </section>
 
@@ -233,68 +219,67 @@
                 window.location.href = 'login.html';
             }
 
+            $("#item-title").text(sessionStorage.getItem('itemTitle'));
+            $("#item-description").text(sessionStorage.getItem('itemDescription'));
+
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
 
             $.ajax({
-                url: window.baseUrl + '/movie/view/' + id,
+                url: window.baseUrl + '/user/list',
                 type: 'GET',
-                success: function(data) {
-                    $('#movie-title').text(data.title);
-                    $('#movie-description').text(data.description);
-                    $('#movie-cost').text("$" + data.cost);
-                    $('#movie-genre').text(data.genre.name);
-                    $('#movie-publisher').text(data.publisher.name);
-
-                    sessionStorage.setItem('itemId', id);
-                    sessionStorage.setItem('itemTitle', data.title);
-                    sessionStorage.setItem('itemDescription', data.description);
-                },
-                error: function(error) {
-                    alert("Error fetching movie data");
-                }
-            });
-
-            $.ajax({    
-                url: window.baseUrl + '/item/list',
-                type: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: JSON.stringify({
-                    mediaId: parseInt(id),
-                    itemType: "Movie"
-                }),
                 success: function(data) {
                     const tableBody = $('#resultDataTable tbody');
                     tableBody.empty();
 
-                    data.forEach(item => {
+                    data.forEach(user => {
                         const row = $('<tr></tr>');
-                        row.append('<td>' + item.id + '</td>');
-                        if (item.itemStatus.status == availableStatus) {
-                            row.append('<td><span class="label bg-green">' + availableStatus + '</span></td>');
-                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="check-out-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
-                        } else if (item.itemStatus.status == checkedOutStatus)  {
-                            row.append('<td><span class="label bg-orange">' + checkedOutStatus + '</span></td>');
-                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="reserve-button" class="btn bg-red waves-effect" data-item-id="' + item.id + '"><i class="material-icons">undo</i><span>RETURN</span></button></div></div></td>');
-                        } else {
-                            row.append('<td><span class="label bg-light-blue">' + onHoldStatus + '</span></td>');
-                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="check-out-button" class="btn bg-teal waves-effect" data-item-id="' + item.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
-                        }                       
+                        row.append('<td>' + user.id + '</td>');
+                        row.append('<td>' + user.firstName + '</td>');
+                        row.append('<td>' + user.lastName + '</td>');
+                        row.append('<td>' + user.email + '</td>');
+                        row.append('<td>' + user.phoneNumber + '</td>');
+                        row.append('<td>' + user.userType.type + '</td>');
+                        row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="check-out-button" class="btn bg-teal waves-effect" data-user-id="' + user.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
                         tableBody.append(row);
                     });
 
                     $('#resultDataTable').DataTable();
                 },
                 error: function(error) {
-                    alert("Error fetching movies data");
+                    alert("Error fetching users data");
                 }
             });
 
             $('#resultDataTable').on('click', '#check-out-button', function() {
-                const itemId = $(this).data('item-id');
-                window.location.href = 'check-out.html?id=' + itemId;
+                if (confirm("Are you sure you want to checkout this item?")) {
+                    const userId = $(this).data('user-id');
+                    $.ajax({
+                        url: window.baseUrl + '/checkout/create',
+                        type: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify({
+                            item: {
+                                id: id
+                            },
+                            user: {
+                                id: userId
+                            }
+                        }),
+                        success: function(response) {
+                            // Handle successful deletion
+                            alert('Checkout successfull!');
+                            window.location.href = 'check-outs.html';
+                        },
+                        error: function(error) {
+                            // Handle error
+                            console.error('Max checkout reached for this user', error);
+                            alert('Max checkout reached for this user');
+                        }
+                    });
+                }
             });
         });
     </script>
