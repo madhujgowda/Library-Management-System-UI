@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Books</title>
+    <title>Movies</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
 
     <script src="../js/custom.js"></script>
@@ -114,15 +114,15 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>BOOK</h2>
+                <h2>MOVIE</h2>
             </div>
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header bg-teal">
                             <h2>
-                                <span id="book-title"></span>
-                                <small id="book-description"></small>
+                                <span id="movie-title"></span>
+                                <small id="movie-description"></small>
                             </h2>
                         </div>
                         <div class="body">
@@ -130,24 +130,16 @@
                                 <table class="table table-striped">
                                     <tbody>
                                         <tr>
-                                            <th scope="row">ISBN</th>
-                                            <td id="book-isbn"></td>
-                                        </tr>
-                                        <tr>
                                             <th scope="row">Cost</th>
-                                            <td id="book-cost"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Author</th>
-                                            <td id="book-author"></td>
+                                            <td id="movie-cost"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Genre</th>
-                                            <td id="book-genre"></td>
+                                            <td id="movie-genre"></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Publisher</th>
-                                            <td id="book-publisher"></td>
+                                            <td id="movie-publisher"></td>
                                         </tr>                                    
                                     </tbody>
                                 </table>
@@ -247,19 +239,17 @@
             const id = urlParams.get('id');
 
             $.ajax({
-                url: window.baseUrl + '/book/view/' + id,
+                url: window.baseUrl + '/movie/view/' + id,
                 type: 'GET',
                 success: function(data) {
-                    $('#book-title').text(data.title);
-                    $('#book-description').text(data.description);
-                    $('#book-isbn').text(data.isbn);
-                    $('#book-cost').text("$" + data.cost);
-                    $('#book-author').text(data.author.firstName + " " + data.author.lastName);
-                    $('#book-genre').text(data.genre.name);
-                    $('#book-publisher').text(data.publisher.name);
+                    $('#movie-title').text(data.title);
+                    $('#movie-description').text(data.description);
+                    $('#movie-cost').text("$" + data.cost);
+                    $('#movie-genre').text(data.genre.name);
+                    $('#movie-publisher').text(data.publisher.name);
                 },
                 error: function(error) {
-                    alert("Error fetching book data");
+                    alert("Error fetching movie data");
                 }
             });
 
@@ -271,7 +261,7 @@
                 },
                 data: JSON.stringify({
                     mediaId: parseInt(id),
-                    itemType: "Book"
+                    itemType: "Movie"
                 }),
                 success: function(data) {
                     const tableBody = $('#resultDataTable tbody');
@@ -296,7 +286,7 @@
                     $('#resultDataTable').DataTable();
                 },
                 error: function(error) {
-                    alert("Error fetching books data");
+                    alert("Error fetching movies data");
                 }
             });
 
