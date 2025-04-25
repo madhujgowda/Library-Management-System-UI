@@ -225,31 +225,57 @@
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
 
-            $.ajax({
-                url: window.baseUrl + '/user/list',
-                type: 'GET',
-                success: function(data) {
-                    const tableBody = $('#resultDataTable tbody');
-                    tableBody.empty();
+            if (urlParams.get('itemStatus') == onHoldStatus) {
+                $.ajax({
+                    url: window.baseUrl + '/reservation/item/' + id,
+                    type: 'GET',
+                    success: function(data) {
+                        const tableBody = $('#resultDataTable tbody');
+                        tableBody.empty();
 
-                    data.forEach(user => {
                         const row = $('<tr></tr>');
-                        row.append('<td>' + user.id + '</td>');
-                        row.append('<td>' + user.firstName + '</td>');
-                        row.append('<td>' + user.lastName + '</td>');
-                        row.append('<td>' + user.email + '</td>');
-                        row.append('<td>' + user.phoneNumber + '</td>');
-                        row.append('<td>' + user.userType.type + '</td>');
-                        row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="check-out-button" class="btn bg-teal waves-effect" data-user-id="' + user.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
+                        row.append('<td>' + data[0].user.id + '</td>');
+                        row.append('<td>' + data[0].user.firstName + '</td>');
+                        row.append('<td>' + data[0].user.lastName + '</td>');
+                        row.append('<td>' + data[0].user.email + '</td>');
+                        row.append('<td>' + data[0].user.phoneNumber + '</td>');
+                        row.append('<td>' + data[0].user.userType.type + '</td>');
+                        row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="check-out-button" class="btn bg-teal waves-effect" data-user-id="' + data[0].user.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
                         tableBody.append(row);
-                    });
 
-                    $('#resultDataTable').DataTable();
-                },
-                error: function(error) {
-                    alert("Error fetching users data");
-                }
-            });
+                        $('#resultDataTable').DataTable();
+                    },
+                    error: function(error) {
+                        alert("Error fetching users data");
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: window.baseUrl + '/user/list',
+                    type: 'GET',
+                    success: function(data) {
+                        const tableBody = $('#resultDataTable tbody');
+                        tableBody.empty();
+
+                        data.forEach(user => {
+                            const row = $('<tr></tr>');
+                            row.append('<td>' + user.id + '</td>');
+                            row.append('<td>' + user.firstName + '</td>');
+                            row.append('<td>' + user.lastName + '</td>');
+                            row.append('<td>' + user.email + '</td>');
+                            row.append('<td>' + user.phoneNumber + '</td>');
+                            row.append('<td>' + user.userType.type + '</td>');
+                            row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px" id="check-out-button" class="btn bg-teal waves-effect" data-user-id="' + user.id + '"><i class="material-icons">shopping_cart</i><span>CHECK OUT</span></button></div></div></td>');
+                            tableBody.append(row);
+                        });
+
+                        $('#resultDataTable').DataTable();
+                    },
+                    error: function(error) {
+                        alert("Error fetching users data");
+                    }
+                });
+            }
 
             $('#resultDataTable').on('click', '#check-out-button', function() {
                 if (confirm("Are you sure you want to checkout this item?")) {
