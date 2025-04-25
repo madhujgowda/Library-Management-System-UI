@@ -33,6 +33,11 @@ let menuItems = [
         title: "Reservations",
         href: "reservations.html",
         icon: "https"
+    },
+    {
+        title: "Saved Items",
+        href: "saved-items.html",
+        icon: "bookmark"
     }
 ];
 const src =
