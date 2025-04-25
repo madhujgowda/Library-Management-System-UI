@@ -5,6 +5,11 @@ let menuItems = [
         icon: "home"
     },
     {
+        title: "Checked Items",
+        href: "check-outs.html",
+        icon: "list"
+    },
+    {
         title: "Users",
         href: "users.html",
         icon: "wc"
