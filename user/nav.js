@@ -10,6 +10,11 @@ let menuItems = [
         icon: "list"
     },
     {
+        title: "Late Fees",
+        href: "late-fees.html",
+        icon: "attach_money"
+    },
+    {
         title: "Books",
         href: "books.html",
         icon: "book"
