@@ -222,14 +222,34 @@
                         row.append('<td>' + checkout.item.itemType.type + '</td>');
                         row.append('<td>' + checkout.user.firstName + ' ' + checkout.user.lastName + '</td>');
                         row.append('<td>' + checkout.renewalCount + '</td>');
-                        row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="reserve-button" class="btn bg-red waves-effect" data-checkout-id="' + checkout.id + '"><i class="material-icons">undo</i><span>RETURN</span></button></div></div></td>');
+                        row.append('<td><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="icon-and-text-button-demo"><button type="button" style="width: 150px"  id="return-button" class="btn bg-red waves-effect" data-checkout-id="' + checkout.id + '"><i class="material-icons">undo</i><span>RETURN</span></button></div></div></td>');
                         tableBody.append(row);
                     });
 
                     $('#resultDataTable').DataTable();
                 },
                 error: function(error) {
-                    alert("Error fetching books data");
+                    alert("Error fetching checkouts data");
+                }
+            });
+
+            $('#resultDataTable').on('click', '#return-button', function() {
+                if (confirm("Are you sure you want to return this item?")) {
+                    const checkoutId = $(this).data('checkout-id');
+                    $.ajax({
+                        url: window.baseUrl + '/checkout/return/' + checkoutId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            // Handle successful deletion
+                            alert('Item returned successfully!');
+                            window.location.href = 'check-outs.html';
+                        },
+                        error: function(error) {
+                            // Handle error
+                            console.error('Error returning a item:', error);
+                            alert('Error returning a item. Please try again.');
+                        }
+                    });
                 }
             });
         });
