@@ -270,6 +270,19 @@
                 }
             });
 
+            // $.ajax({
+            //     url: window.baseUrl + '/saved-item/media/' + id,
+            //     type: 'GET',
+            //     success: function(data) {
+            //         if (data.length > 0) {
+            //             $('#save-item-button').hide();
+            //         }
+            //     },
+            //     error: function(error) {
+            //         alert("Error fetching movie data");
+            //     }
+            // });
+
             $.ajax({    
                 url: window.baseUrl + '/item/list',
                 type: 'POST',
