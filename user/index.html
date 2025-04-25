@@ -116,7 +116,32 @@
             <div class="block-header">
                 <h2>DASHBOARD</h2>
             </div>
-
+            <!-- Widgets -->
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">list</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Checked Items</div>
+                            <div id="checked-items-count" class="number count-to" data-from="0" data-to="5" data-speed="500" data-fresh-interval="20"><span id="span-checked-items-count"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">https</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Reservations</div>
+                            <div id="reservations-count" class="number count-to" data-from="0" data-to="5" data-speed="500" data-fresh-interval="20"><span id="span-reservations-count"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Widgets -->
         </div>
     </section>
 
@@ -177,6 +202,33 @@
                 window.location.href = 'login.html';
             }
 
+            $.ajax({
+                url: window.baseUrl + '/checkout/user/list/' + userId,
+                type: 'GET',
+                success: function(data) {
+                    setTimeout(() => {
+                        $('#checked-items-count').attr('data-to', data);
+                        $('#checked-items-count').text(data.length);
+                    }, 500);
+                },
+                error: function(error) {
+                    alert("Error fetching checked items data");
+                }
+            });
+
+            $.ajax({
+                url: window.baseUrl + '/reservation/user/' + userId,
+                type: 'GET',
+                success: function(data) {
+                    setTimeout(() => {
+                        $('#reservations-count').attr('data-to', data);
+                        $('#reservations-count').text(data.length);
+                    }, 500);
+                },
+                error: function(error) {
+                    alert("Error fetching reservations data");
+                }
+            });
         });
     </script>
 </body>
