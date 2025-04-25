@@ -35,6 +35,11 @@ let menuItems = [
         icon: "videogame_asset"
     },
     {
+        title: "Reservations",
+        href: "reservations.html",
+        icon: "https"
+    },
+    {
         title: "Genres",
         href: "genres.html",
         icon: "library_music"
